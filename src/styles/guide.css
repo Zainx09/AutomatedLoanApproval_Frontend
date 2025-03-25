@@ -1,0 +1,214 @@
+/* src/styles/guide.css */
+.guide-container {
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    background: #f5f5f5; /* Light grey background */
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .guide-hero {
+    text-align: center;
+    padding: 20px 20px 30px 20px;
+    background: linear-gradient(135deg, #010e38 0%, #08153e 100%); /* Green gradient */
+    border-radius: 15px;
+    color: #fff;
+    width: 1200px;
+    /* max-width: 800px; */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  .guide-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .guide-icon {
+    font-size: 3rem;
+  }
+  
+  .guide-subtitle {
+    font-size: 1.6rem;
+    line-height: 1.6;
+  }
+  
+  .guide-section {
+    width: 1000px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+  }
+  
+  .guide-section-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #000; /* Black text */
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .guide-card {
+    background: #fff; /* White card */
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 94%;
+  }
+  
+  .guide-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #333; /* Darker grey for readability */
+  }
+  
+  /* How It Works Steps */
+  .guide-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .guide-step {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+    max-width: 280px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .guide-step:hover {
+    transform: translateY(-5px);
+  }
+  
+  .guide-step-icon {
+    font-size: 2rem;
+    color: #05133a; /* Green */
+    margin-bottom: 5px;
+  }
+  
+  .guide-step h3 {
+    font-size: 1.2rem;
+    color: #000;
+    margin-bottom: 8px;
+  }
+  
+  .guide-step p {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  /* Key Features Grid */
+  .guide-features-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .guide-feature {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+    max-width: 280px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .guide-feature:hover {
+    transform: translateY(-5px);
+  }
+  
+  .guide-feature-icon {
+    font-size: 2rem;
+    color: #05133a; /* Green */
+    margin-bottom: 5px;
+  }
+  
+  .guide-feature h3 {
+    font-size: 1.2rem;
+    color: #000;
+    margin-bottom: 8px;
+  }
+  
+  .guide-feature p {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  /* Benefits List */
+  .guide-benefits-list {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+  }
+  
+  .guide-benefits-list li {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    color: #333;
+    margin: 15px 0;
+  }
+  
+  .guide-list-icon {
+    color: #05133a; /* Green */
+    margin-right: 10px;
+  }
+  
+  .guide-benefits-list span {
+    font-weight: 600;
+    color: #000;
+  }
+  
+  /* Call to Action */
+  .guide-cta {
+    text-align: center;
+    padding: 40px 20px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .guide-cta-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 20px;
+  }
+  
+  .guide-cta-button {
+    display: inline-block;
+    background: #05133a; /* Green */
+    color: #fff;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .guide-cta-button:hover {
+    background: #389e0d; /* Darker green */
+    transform: scale(1.05);
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
