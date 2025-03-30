@@ -2,7 +2,7 @@ import React from "react";
 import LoanCalculator from "../components/LoanCalculator";
 
 const LoanCalculatorPage = () => (
-  <div className="loan-calculator-container">
+  <div className="checkApproval-container">
     <LoanCalculator />
   </div>
 );

@@ -14,14 +14,9 @@ const features = [
     route: "/guide",
   },
   {
-    title: "credit_insights",
-    description: "understand_your_credit_health",
-    route: "/credit-insights",
-  },
-  {
     title: "fast_processing",
     description: "get_results_in_minutes",
-    route: "/check-approval",
+    route: "/checkapproval",
   },
 ];
 

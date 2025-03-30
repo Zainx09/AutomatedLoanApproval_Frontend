@@ -7,6 +7,7 @@ import Admin from './pages/Admin';
 import HomePage from "./pages/HomePage";
 import LoanCalculator from "./pages/LoanCalculatorPage";
 import GuidePage from "./pages/GuidePage";
+import ApplicationPage from './pages/ApplicationPage';
 
 const App = () => (
   <AuthProvider>
@@ -15,10 +16,12 @@ const App = () => (
       <Routes>
         <Route path="/home" element={<HomePage />} />
         <Route path="/loan-calculator" element={<LoanCalculator />} />
-        <Route path="/guide" element={<GuidePage />} />
+        {/* <Route path="/guide" element={<GuidePage />} /> */}
 
         <Route path="/checkapproval" element={<CheckApproval />} />
         <Route path="/admin" element={<Admin />} />
+
+        <Route path="/application/:id?" element={<ApplicationPage />} /> {/* Added route */}
 
         {/* Catch-all route to redirect to /home */}
         <Route path="*" element={<Navigate to="/home" replace />} />

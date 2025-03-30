@@ -39,13 +39,6 @@ export const dataPointMetaData = [
     man: 1,
   },
   {
-    name: "Requested_Amount",
-    fieldType: "inputNumber",
-    dataType: "Float",
-    range: { from: 1000, to: 50000 },
-    key: "requested_amount", // Added key,
-  },
-  {
     name: "Age",
     fieldType: "inputNumber",
     dataType: "Integer",
@@ -83,7 +76,7 @@ export const dataPointMetaData = [
       { value: 0, label: "Unemployed" },
     ],
     key: "employment_status", // Added key,
-    man: 1,
+    man: 0,
   },
   {
     name: "Months_Employed",
@@ -135,6 +128,14 @@ export const dataPointMetaData = [
     dataType: "Float",
     range: { from: 1000, to: 500000 },
     key: "total_credit_limit", // Added key,
+    man: 1,
+  },
+  {
+    name: "Requested_Amount",
+    fieldType: "inputNumber",
+    dataType: "Float",
+    range: { from: 1000, to: 25000 },
+    key: "requested_amount", // Added key,
     man: 1,
   },
 ];

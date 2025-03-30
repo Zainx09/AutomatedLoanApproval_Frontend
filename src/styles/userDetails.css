@@ -1,0 +1,59 @@
+.user-details-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f7ffb1 100%);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    width: 1200px;
+    border: 1px solid #e8e8e8;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, rgba(252, 253, 255, 0.486) 100%);
+  }
+  
+  /* .user-details-card .ant-card-head {
+    background: #1890ff;
+    color: #fff;
+    border-radius: 15px 15px 0 0;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+  } */
+  
+  .user-details-card .ant-card-head .anticon {
+    margin-right: 10px;
+    font-size: 1.8rem;
+  }
+  
+  .user-info-item {
+    display: flex;
+    align-items: center;
+    margin: 15px 3px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #F3F3F3;
+  }
+  
+  .user-info-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(160, 160, 160, 0.1);
+  }
+  
+  .user-info-icon { 
+    font-size: 1.3rem;
+    color: #083b6b;
+    margin-right: 10px;
+  }
+  
+  .user-info-item .ant-typography-strong {
+    color: #333;
+    font-size: 1.1rem;
+  }
+  
+  .user-info-item .ant-typography {
+    color: #555;
+    font-size: 1rem;
+  }

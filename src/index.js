@@ -6,7 +6,15 @@ import reportWebVitals from './reportWebVitals';
 
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
+import { notification } from "antd";
+import "antd/dist/reset.css";
 
+// Configure notification globally
+notification.config({
+  placement: "topRight", // Position of the notification
+  top: 50, // Distance from the top in pixels
+  duration: 5, // Default duration (in seconds)
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root')

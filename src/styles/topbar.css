@@ -1,0 +1,121 @@
+/* Top Bar Container */
+.topbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    height: 64px;
+    background: #001529;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  /* Navigation Menu */
+  .topbar-nav-menu {
+    flex: 1;
+    background: transparent !important;
+    border-bottom: none !important;
+    line-height: 50px !important;
+  }
+  
+  .topbar-nav-menu .ant-menu-item {
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 500;
+    padding: 0 16px;
+    margin: 4px !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+  }
+  
+  .topbar-nav-menu .ant-menu-item:hover {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .topbar-nav-menu .ant-menu-item-selected {
+    color: #fff !important;
+    background: rgba(24, 143, 255, 0.292) !important;
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  
+  /* Right Side Actions */
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  /* User Info */
+  .topbar-user-info {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-weight: 500;
+  }
+  
+  .topbar-user-icon {
+    margin-right: 8px;
+    color: #1890ff;
+  }
+  
+  /* Buttons */
+  .topbar-login-btn {
+    background: #1890ff;
+    border-color: #1890ff;
+    font-weight: 500;
+  }
+  
+  .topbar-login-btn:hover {
+    background: #40a9ff !important;
+    border-color: #40a9ff !important;
+  }
+  
+  .topbar-logout-btn {
+    color: #fff;
+    background: transparent;
+    border-color: #ff4d4f;
+  }
+  
+  .topbar-logout-btn:hover {
+    color: #fff !important;
+    background: #ff4d4f !important;
+  }
+  
+  .topbar-language-btn {
+    color: #fff;
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .topbar-language-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  /* Language Dropdown */
+  .topbar-language-menu .ant-dropdown-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+  }
+  
+  /* Login Modal */
+  .topbar-login-modal .ant-modal-header {
+    background: #001529;
+    color: white;
+  }
+  
+  .topbar-login-modal .ant-modal-title {
+    color: white;
+  }
+  
+  .topbar-login-modal .ant-modal-close-x {
+    color: rgba(255, 255, 255, 0.65);
+  }
+  
+  .topbar-login-modal .ant-input {
+    margin-bottom: 16px;
+  }

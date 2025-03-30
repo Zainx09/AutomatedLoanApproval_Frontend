@@ -1,12 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Modal, Typography, Card, Divider, Progress, Tag } from "antd";
+import {
+  Table,
+  Input,
+  Button,
+  Modal,
+  Typography,
+  Card,
+  Divider,
+  Progress,
+  Tag,
+  Dropdown,
+  Select,
+  message,
+  Popconfirm,
+  Tooltip,
+} from "antd";
 import { useTranslation } from "react-i18next";
-import { getAdminUsers, predictLoanById } from "../agent/api";
+import {
+  getAdminUsers,
+  predictLoanById,
+  getAdminApplications,
+  updateApplication,
+} from "../agent/api";
 import { dataPointMetaData } from "../commons"; // Adjust import path
 import UserStatsHeader from "../components/UserStatsHeader";
+import Icon from "../utils/IconWrapper";
+import "../styles/AdminPage.css";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
+const { Option } = Select;
 
 // Define color codes for credit score ranges
 const CREDIT_SCORE_COLORS = {
@@ -30,6 +53,13 @@ const PAYMENT_HISTORY_COLORS = {
   0: "#ff4d4f", // Red for Late>60
 };
 
+// Define color codes for application Status
+const APPLICATION_STATUS_COLORS = {
+  "Under Review": "#faad14",
+  Approved: "#52c41a", // Green for Full-Time
+  Rejected: "#ff4d4f", // Red for Unemployed
+};
+
 const getCreditScoreColor = (score) => {
   if (score >= 700) return CREDIT_SCORE_COLORS.high;
   if (score >= 600) return CREDIT_SCORE_COLORS.mid;
@@ -40,13 +70,27 @@ const AdminPage = () => {
   const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
+
+  const [applications, setApplications] = useState([]);
+  const [filteredApplications, setFilteredApplications] = useState([]);
   const [isPredictModalVisible, setIsPredictModalVisible] = useState(false);
   const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false);
   const [prediction, setPrediction] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
 
+  //for update application status
+  const [selectedStatus, setSelectedStatus] = useState(null);
+
+  let selectedFilter = null;
+
   // List of datapoint names to include in columns
-  const selectedDataPoints = ["Credit_Score", "Annual_Income", "Employment_Status", "Credit_Utilization", "Payment_History"];
+  const selectedDataPoints = [
+    "Credit_Score",
+    "Annual_Income",
+    "Employment_Status",
+    "Credit_Utilization",
+    "Payment_History",
+  ];
 
   // Fetch data from /admin/users on mount
   useEffect(() => {
@@ -59,7 +103,19 @@ const AdminPage = () => {
         console.error("Error fetching admin users:", error);
       }
     };
+
+    const fetchApplications = async () => {
+      try {
+        const data = await getAdminApplications();
+        setApplications(data);
+        setFilteredApplications(data);
+      } catch (error) {
+        console.error("Error fetching admin applications:", error);
+      }
+    };
+
     fetchUsers();
+    fetchApplications();
   }, []);
 
   // Handle search filter
@@ -71,6 +127,38 @@ const AdminPage = () => {
         user.email.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredUsers(filtered);
+  };
+
+  const handleFilterSearch = (key, value) => {
+    if (!key) {
+      setFilteredUsers(users);
+      return;
+    }
+    const filtered = users?.filter((app) =>
+      app?.[key]?.toString().includes(value)
+    );
+    setFilteredUsers(filtered);
+  };
+
+  const handleAppSearch = (value) => {
+    const filtered = applications?.filter(
+      (app) =>
+        app.application_id.toString().includes(value) ||
+        // app.applicant_id.toString().includes(value) ||
+        app.username.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredApplications(filtered);
+  };
+
+  const handleAppFilterSearch = (key, value) => {
+    if (!key) {
+      setFilteredApplications(applications);
+      return;
+    }
+    const filtered = applications?.filter((app) =>
+      app?.[key]?.toString().includes(value)
+    );
+    setFilteredApplications(filtered);
   };
 
   // Handle predict button click
@@ -90,58 +178,6 @@ const AdminPage = () => {
     setSelectedUser(record);
     setIsDetailsModalVisible(true);
   };
-
-  // // Table columns
-  // const columns = [
-  //   {
-  //     title: t("applicant_id"),
-  //     dataIndex: "applicant_id",
-  //     key: "applicant_id",
-  //     sorter: (a, b) => a.applicant_id - b.applicant_id,
-  //   },
-  //   {
-  //     title: t("username"),
-  //     dataIndex: "username",
-  //     key: "username",
-  //     sorter: (a, b) => a.username.localeCompare(b.username),
-  //   },
-  //   {
-  //     title: t("email"),
-  //     dataIndex: "email",
-  //     key: "email",
-  //     sorter: (a, b) => a.email.localeCompare(b.email),
-  //   },
-  //   ...dataPointMetaData
-  //     .filter((dataPoint) => selectedDataPoints.includes(dataPoint.name))
-  //     .map((dataPoint) => ({
-  //       title: t(dataPoint.name),
-  //       key: dataPoint.key,
-  //       dataIndex: dataPoint.key,
-  //       sorter: (a, b) => {
-  //         const aValue = a[dataPoint.key] || "";
-  //         const bValue = b[dataPoint.key] || "";
-  //         return aValue.toString().localeCompare(bValue.toString());
-  //       },
-  //       render: (_, record) => (
-  //         <div>
-  //           <p>{dataPoint?.options?.length > 0 ? dataPoint.options.find(opt => opt.value === record[dataPoint.key])?.label : record?.[dataPoint.key] ?? "N/A"}</p>
-  //         </div>
-  //       ),
-  //     })),
-  //   {
-  //     title: t("action"),
-  //     key: "action",
-  //     render: (_, record) => (
-  //       <Button
-  //         type="primary"
-  //         onClick={(event) => handlePredict(record.applicant_id, event)} // Pass event to handler
-  //         style={{ background: "#001529", borderColor: "#001529" }}
-  //       >
-  //         {t("check_approval")}
-  //       </Button>
-  //     ),
-  //   },
-  // ];
 
   const columns = [
     {
@@ -163,67 +199,96 @@ const AdminPage = () => {
       sorter: (a, b) => a.email.localeCompare(b.email),
     },
     ...dataPointMetaData
-    .filter((dataPoint) => selectedDataPoints.includes(dataPoint.name))
-    .map((dataPoint) => ({
-      title: t(dataPoint.name),
-      key: dataPoint.key,
-      dataIndex: dataPoint.key,
-      sorter: (a, b) => {
-        const aValue = a[dataPoint.key] || "";
-        const bValue = b[dataPoint.key] || "";
-        return aValue.toString().localeCompare(bValue.toString());
-      },
-      render: (_, record) => {
-        if (dataPoint.key === "credit_score") {
-          const score = record[dataPoint.key] || 0;
-          const percent = (score / 900) * 100;
+      .filter((dataPoint) => selectedDataPoints.includes(dataPoint.name))
+      .map((dataPoint) => ({
+        title: t(dataPoint.name),
+        key: dataPoint.key,
+        dataIndex: dataPoint.key,
+        sorter: (a, b) => {
+          const aValue = a[dataPoint.key] || "";
+          const bValue = b[dataPoint.key] || "";
+          return aValue.toString().localeCompare(bValue.toString());
+        },
+        render: (_, record) => {
+          if (dataPoint.key === "credit_score") {
+            const score = record[dataPoint.key] || 0;
+            const percent = (score / 900) * 100;
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  width: 150,
+                }}
+              >
+                <Progress
+                  percent={percent}
+                  showInfo={false}
+                  strokeColor={getCreditScoreColor(score)}
+                  style={{ width: "70%" }}
+                />
+                <span>{score}</span>
+              </div>
+            );
+          }
+          if (dataPoint.key === "employment_status") {
+            const value = record[dataPoint.key];
+            const label =
+              dataPoint.options.find((opt) => opt.value === value)?.label ||
+              "N/A";
+            return (
+              <Tag
+                color={EMPLOYMENT_STATUS_COLORS[value] || "#d9d9d9"} // Default gray if value missing
+                style={{
+                  color: "white",
+                  borderRadius: "5px",
+                  padding: "2px 8px",
+                  fontWeight: "bold",
+                }}
+              >
+                {label}
+              </Tag>
+            );
+          }
+          if (dataPoint.key === "payment_history") {
+            const value = record[dataPoint.key];
+            const label =
+              dataPoint.options.find((opt) => opt.value === value)?.label ||
+              "N/A";
+            return (
+              <Tag
+                color={PAYMENT_HISTORY_COLORS[value] || "#d9d9d9"} // Default gray if value missing
+                style={{
+                  color: "white",
+                  borderRadius: "5px",
+                  padding: "2px 8px",
+                  fontWeight: "bold",
+                }}
+              >
+                {label}
+              </Tag>
+            );
+          }
           return (
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Progress
-                percent={percent}
-                showInfo={false}
-                strokeColor={getCreditScoreColor(score)}
-                style={{ width: "70%" }}
-              />
-              <span>{score}</span>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                height: "100%",
+                border: "0px solid",
+              }}
+            >
+              {dataPoint?.options?.length > 0
+                ? dataPoint.options.find(
+                    (opt) => opt.value === record[dataPoint.key]
+                  )?.label
+                : record?.[dataPoint.key] ?? "N/A"}
             </div>
           );
-        }
-        if (dataPoint.key === "employment_status") {
-          const value = record[dataPoint.key];
-          const label = dataPoint.options.find((opt) => opt.value === value)?.label || "N/A";
-          return (
-            <Tag
-              color={EMPLOYMENT_STATUS_COLORS[value] || "#d9d9d9"} // Default gray if value missing
-              style={{ color: "white", borderRadius: "5px", padding: "2px 8px", fontWeight:'bold' }}
-            >
-              {label}
-            </Tag>
-          );
-        }
-        if (dataPoint.key === "payment_history") {
-          const value = record[dataPoint.key];
-          const label = dataPoint.options.find((opt) => opt.value === value)?.label || "N/A";
-          return (
-            <Tag
-              color={PAYMENT_HISTORY_COLORS[value] || "#d9d9d9"} // Default gray if value missing
-              style={{ color: "white", borderRadius: "5px", padding: "2px 8px", fontWeight:'bold' }}
-            >
-              {label}
-            </Tag>
-          );
-        }
-        return (
-          <div>
-            <p>
-              {dataPoint?.options?.length > 0
-                ? dataPoint.options.find((opt) => opt.value === record[dataPoint.key])?.label
-                : record?.[dataPoint.key] ?? "N/A"}
-            </p>
-          </div>
-        );
-      },
-    })),
+        },
+      })),
     {
       title: t("action"),
       key: "action",
@@ -239,43 +304,303 @@ const AdminPage = () => {
     },
   ];
 
+  const appColumns = [
+    {
+      title: t("application_id"),
+      dataIndex: "application_id",
+      key: "application_id",
+      sorter: (a, b) => a.applicant_id - b.applicant_id,
+      render: (value, record) => (
+        <Tooltip title={t("open_application")}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "95%",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              const url = `/application/${record.applicant_id}`;
+              window.open(url, "_blank");
+            }}
+          >
+            <span style={{ color: "#1890ff" }}>{value}</span>
+            <Icon
+              type="LinkOutlined"
+              style={{ color: "#1890ff", fontSize: 16 }}
+            />
+          </div>
+        </Tooltip>
+      ),
+    },
+    {
+      title: t("applicant_id"),
+      dataIndex: "applicant_id",
+      key: "applicant_id",
+      sorter: (a, b) => a.applicant_id - b.applicant_id,
+    },
+    {
+      title: t("username"),
+      dataIndex: "username",
+      key: "username",
+      sorter: (a, b) => a.username.localeCompare(b.username),
+    },
+    {
+      title: t("application_status"),
+      dataIndex: "status",
+      key: "status",
+      sorter: (a, b) => a.status.localeCompare(b.status),
+      render: (value, record) => (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "95%",
+          }}
+        >
+          <Tag
+            color={APPLICATION_STATUS_COLORS[value] || "#fa8c16"}
+            style={{
+              color: "white",
+              borderRadius: "5px",
+              padding: "2px 8px",
+              fontWeight: "bold",
+            }}
+          >
+            {value}
+          </Tag>
+          {(value === "Pending" || value === "Under Review") && (
+            <Dropdown
+              overlay={
+                <div
+                  style={{
+                    width: 200,
+                    padding: 10,
+                    background: "#fff",
+                    borderRadius: 5,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Select
+                    style={{ width: "100%" }}
+                    placeholder={t("select_status")}
+                    onChange={(selected) => setSelectedStatus(selected)}
+                    value={selectedStatus}
+                  >
+                    {value === "Pending" ? (
+                      <>
+                        <Option value="Under Review">
+                          {t("under_review")}
+                        </Option>
+                        <Option value="Approved">{t("approved")}</Option>
+                        <Option value="Rejected">{t("rejected")}</Option>
+                      </>
+                    ) : (
+                      <>
+                        <Option value="Approved">{t("approved")}</Option>
+                        <Option value="Rejected">{t("rejected")}</Option>
+                      </>
+                    )}
+                  </Select>
+                  <Popconfirm
+                    title={`${t("confirm_update_msg")} ${
+                      record.application_id
+                    } ${t("to")} ${selectedStatus}?`}
+                    okText={t("yes")}
+                    cancelText={t("no")}
+                    onConfirm={async () => {
+                      try {
+                        await updateApplication({
+                          application_id: record.application_id,
+                          status: selectedStatus,
+                        });
+                        message.success(t("status_updated"));
+                        const updatedApplications = applications.map((app) =>
+                          app.application_id === record.application_id
+                            ? { ...app, status: selectedStatus }
+                            : app
+                        );
+                        setApplications(updatedApplications);
+                        const updatedFilteredApplications =
+                          filteredApplications.map((app) =>
+                            app.application_id === record.application_id
+                              ? { ...app, status: selectedStatus }
+                              : app
+                          );
+                        setFilteredApplications(updatedFilteredApplications);
+                        setSelectedStatus(null);
+                      } catch (e) {
+                        message.error(
+                          e.response?.data?.error || t("update_failed")
+                        );
+                      }
+                    }}
+                    disabled={!selectedStatus}
+                  >
+                    <Button
+                      type="primary"
+                      disabled={!selectedStatus}
+                      style={{ marginTop: 10, width: "90%" }}
+                    >
+                      {t("update_application")}
+                    </Button>
+                  </Popconfirm>
+                </div>
+              }
+              trigger={["click"]}
+            >
+              <Button
+                icon={
+                  <Icon
+                    type={"EditOutlined"}
+                    style={{ color: "black", fontSize: 18 }}
+                  />
+                }
+                size="small"
+                style={{ border: "none", background: "white" }}
+                onClick={(e) => e.stopPropagation()} // Prevent row click
+              />
+            </Dropdown>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: t("approved_amount"),
+      dataIndex: "approved_amount",
+      key: "approved_amount",
+      sorter: (a, b) => a.approved_amount.localeCompare(b.approved_amount),
+      render: (value) => value || "-",
+    },
+    {
+      title: t("interest_rate"),
+      dataIndex: "interest_rate",
+      key: "interest_rate",
+      sorter: (a, b) => a.interest_rate.localeCompare(b.interest_rate),
+      render: (value) => value || "-",
+    },
+    {
+      title: t("dti"),
+      dataIndex: "dti",
+      key: "dti",
+      sorter: (a, b) => a.dti.localeCompare(b.dti),
+      render: (value) => value || "-",
+    },
+  ];
+
   return (
     <div
-      style={{
-        padding: "20px",
-        // width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        flex: 1,
-        overflowX: "hidden",
-      }}
+      // style={{
+      //   padding: "20px",
+      //   // width: "100%",
+      //   display: "flex",
+      //   flexDirection: "column",
+      //   flex: 1,
+      //   overflowX: "hidden",
+      // }}
+      className="admin-container"
     >
-      <Title level={2}>{t("admin_users")}</Title>
-      <UserStatsHeader data={filteredUsers} handleSearch={handleSearch} t={t} />
-      {/* <Search
-        placeholder={t("search_users")}
-        onSearch={handleSearch}
-        style={{ marginBottom: "20px", width: "300px" }}
-      /> */}
-      <div
-        style={{
-          overflowX: "auto",
-          // maxWidth: "95%",
-        }}
-      >
-        <Table
-          dataSource={filteredUsers}
-          columns={columns}
-          rowKey="applicant_id"
-          scroll={{ x: "max-content" }}
-          bordered
-          style={{cursor: 'pointer'}}
-          onRow={(record) => ({
-            onClick: () => handleRowClick(record),
-          })}
-        />
+      <div style={{ margin:'20px 0px 25px 10px' }}>
+        <span className="mainHeading">{t("admin_users")}</span>
       </div>
 
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: 8,
+          // background: "white",
+          padding: "20px 15px 8px 15px",
+          background:
+            "linear-gradient(135deg, #ffffff 0%, rgba(252, 253, 255, 0.9) 100%)",
+        }}
+      >
+        <UserStatsHeader
+          title={t("Total_Users")}
+          data={filteredUsers}
+          handleSearch={handleSearch}
+          handleFilter={handleFilterSearch}
+          t={t}
+        />
+        <div
+          style={{
+            overflowX: "auto",
+            background: "transparent",
+            // maxWidth: "95%",
+          }}
+        >
+          <Table
+            className="transparent-table" // Add a custom class
+            dataSource={filteredUsers}
+            columns={columns}
+            rowKey="applicant_id"
+            scroll={{ x: "max-content" }}
+            bordered
+            style={{ cursor: "pointer", background: "transparent" }}
+            onRow={(record) => ({
+              onClick: () => handleRowClick(record),
+            })}
+            pagination={{
+              pageSize: 7, // Number of records per page
+              showSizeChanger: false, // Optional: hides page size changer
+            }}
+          />
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: 8,
+          // background: "white",
+          padding: "20px 15px 8px 15px",
+          marginTop: 25,
+          background:
+            "linear-gradient(135deg, #ffffff 0%, rgba(252, 253, 255, 0.9) 100%)",
+        }}
+      >
+        <UserStatsHeader
+          title={t("total_applications")}
+          data={filteredApplications}
+          handleSearch={handleAppSearch}
+          handleFilter={handleAppFilterSearch}
+          applicationHeader={true}
+          t={t}
+        />
+        <div
+          style={{
+            overflowX: "auto",
+            background: "transparent",
+            // maxWidth: "95%",
+          }}
+        >
+          <Table
+            className="transparent-table" // Add a custom class
+            dataSource={filteredApplications}
+            columns={appColumns}
+            rowKey="application_id"
+            scroll={{ x: "max-content" }}
+            bordered
+            style={{ background: "transparent" }}
+            // onRow={(record) => ({
+            //   onClick: () => {
+            //     const url = `/application/${record.applicant_id}`;
+            //     window.open(url, "_blank"); // Opens in a new tab
+            //   },
+            // })}
+            pagination={{
+              pageSize: 7, // Number of records per page
+              showSizeChanger: false, // Optional: hides page size changer
+            }}
+          />
+        </div>
+      </div>
       {/* Prediction Modal */}
       <Modal
         title={t("prediction_result")}
@@ -329,13 +654,13 @@ const AdminPage = () => {
       >
         {selectedUser && (
           <div>
-            <Text strong>{t('applicant_id')}: </Text>
+            <Text strong>{t("applicant_id")}: </Text>
             <Text>{selectedUser.applicant_id}</Text>
             <br />
-            <Text strong>{t('username')}: </Text>
+            <Text strong>{t("username")}: </Text>
             <Text>{selectedUser.username}</Text>
             <br />
-            <Text strong>{t('email')}: </Text>
+            <Text strong>{t("email")}: </Text>
             <Text>{selectedUser.email}</Text>
             <br />
             <Divider />

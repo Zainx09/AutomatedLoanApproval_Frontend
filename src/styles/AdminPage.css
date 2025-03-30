@@ -1,0 +1,25 @@
+.transparent-table .ant-table {
+    background: transparent !important;
+  }
+  
+  
+  .transparent-table .ant-table-tbody > tr > td {
+    background: transparent !important; /* Body cells */
+  }
+  
+
+  
+  .transparent-table .ant-table-content {
+    background: transparent !important; /* Table content area */
+  }
+  
+  /* Optional: Adjust bordered table lines if needed */
+  .transparent-table .ant-table-tbody > tr > td,
+  .transparent-table .ant-table-thead > tr > th {
+    border-color: #d9d9d9; /* Keep borders visible */
+    font-size: 18px;
+    height: 30px; /* Set desired height (e.g., 50px) */
+    line-height: 30px; /* Match height for vertical alignment */
+  }
+
+  

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Tooltip, Typography } from "antd";
+import { Input, Tooltip, Typography, Button } from "antd";
 
 const { Text } = Typography;
 
@@ -26,6 +26,20 @@ const PAYMENT_HISTORY_COLORS = {
   0: "#ff4d4f", // Red for Late>60
 };
 
+// Define color codes for application Status
+const APPLICATION_STATUS_COLORS = {
+  Pending: "#fa8c16",
+  "Under Review": "#faad14",
+  Approved: "#52c41a", // Green for Full-Time
+  Rejected: "#ff4d4f", // Red for Unemployed
+};
+
+// Define color codes for application approval
+const APPLICATION_APPROVAL_COLORS = {
+  0: "#52c41a", // Green for Full-Time
+  1: "#fa8c16", // Red for Unemployed
+};
+
 // Define reusable styles
 const styles = {
   container: {
@@ -37,11 +51,11 @@ const styles = {
     fontWeight: "bold",
     color: "#484848",
   },
-  tableCountNumber:{
+  tableCountNumber: {
     fontSize: 18,
     fontWeight: 900,
-    color:'#108EE9',
-    margin:'0px 7px'
+    color: "#108EE9",
+    margin: "0px 7px",
   },
   statsRow: {
     display: "flex",
@@ -63,7 +77,7 @@ const styles = {
     fontSize: 15,
   },
   statBox: {
-    background: "white",
+    background: "#F9F9F9",
     padding: "5px 10px",
     borderRadius: "8px",
     display: "flex",
@@ -78,13 +92,22 @@ const styles = {
     color: "white",
     fontWeight: "bold",
     fontSize: 12,
+    cursor: "pointer",
   },
   search: {
     width: "300px",
   },
 };
 
-const UserStatsHeader = ({ data, handleSearch, t }) => {
+const UserStatsHeader = ({
+  title,
+  data,
+  handleSearch,
+  applicationHeader,
+  t,
+  handleFilter,
+}) => {
+  const [isFitlerSelected, setIsFilterSelected] = useState(false);
   // Calculate counts for Credit Score
   const creditScoreCounts = {
     high: data.filter((user) => (user.credit_score || 0) >= 700).length,
@@ -110,6 +133,26 @@ const UserStatsHeader = ({ data, handleSearch, t }) => {
     0: data.filter((user) => user.payment_history === 0).length,
   };
 
+  // Calculate counts for Application Status
+  const applicationStatusCounts = {
+    Pending: data.filter((user) => user.status === "Pending")?.length,
+    "Under Review": data.filter((user) => user.status === "Under Review")
+      ?.length,
+    Approved: data.filter((user) => user.status === "Approved")?.length,
+    Rejected: data.filter((user) => user.status === "Rejected")?.length,
+  };
+
+  // Calculate counts for Application Status
+  const approvedCounts = {
+    0: data.filter((user) => user.approved === 1)?.length,
+    1: data.filter((user) => user.approved === 0)?.length,
+  };
+
+  const handleFilterClick = (key, value) => {
+    setIsFilterSelected(!!key);
+    handleFilter?.(key, value);
+  };
+
   return (
     <div style={styles.container}>
       {/* Stats Row */}
@@ -117,139 +160,263 @@ const UserStatsHeader = ({ data, handleSearch, t }) => {
         {/* Total Record Count */}
         <div style={styles.statBox}>
           <Text strong style={styles.tableCount}>
-            
-            {t("Total_Records")} : 
+            {title} :
             <Text strong style={styles.tableCountNumber}>
               {data.length}
             </Text>
           </Text>
         </div>
+
         {/* Stats Container */}
         <div style={styles.statsContainer}>
-          {/* Credit Score Stats */}
-          <div style={styles.statBox}>
-            <Text strong style={styles.indicatorTitle}>
-              {t("Credit_Score")}
-            </Text>
-            <Tooltip title={`High (700+): ${creditScoreCounts.high}`}>
-              <span
-                style={{
-                  ...styles.colorIndicator,
-                  backgroundColor: CREDIT_SCORE_COLORS.high,
-                }}
-              >
-                {creditScoreCounts.high}
-              </span>
-            </Tooltip>
-            <Tooltip title={`Mid (600-699): ${creditScoreCounts.mid}`}>
-              <span
-                style={{
-                  ...styles.colorIndicator,
-                  backgroundColor: CREDIT_SCORE_COLORS.mid,
-                }}
-              >
-                {creditScoreCounts.mid}
-              </span>
-            </Tooltip>
-            <Tooltip title={`Low (<600): ${creditScoreCounts.low}`}>
-              <span
-                style={{
-                  ...styles.colorIndicator,
-                  backgroundColor: CREDIT_SCORE_COLORS.low,
-                }}
-              >
-                {creditScoreCounts.low}
-              </span>
-            </Tooltip>
-          </div>
+          {!!applicationHeader ? (
+            <>
+              {!!isFitlerSelected && (
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    handleFilterClick();
+                  }}
+                >
+                  Clear Filter
+                </Button>
+              )}
+              {/* Employment Status Stats */}
+              <div style={styles.statBox}>
+                <Text strong style={styles.indicatorTitle}>
+                  {t("application_status")}
+                </Text>
+                <Tooltip
+                  title={`Pending: ${applicationStatusCounts["Pending"]}`}
+                >
+                  <span
+                    onClick={() => handleFilterClick("status", "Pending")}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: APPLICATION_STATUS_COLORS["Pending"],
+                    }}
+                  >
+                    {applicationStatusCounts["Pending"]}
+                  </span>
+                </Tooltip>
+                <Tooltip
+                  title={`Under Review: ${applicationStatusCounts["Under Review"]}`}
+                >
+                  <span
+                    onClick={() => handleFilterClick("status", "Under Review")}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor:
+                        APPLICATION_STATUS_COLORS["Under Review"],
+                    }}
+                  >
+                    {applicationStatusCounts["Under Review"]}
+                  </span>
+                </Tooltip>
+                <Tooltip
+                  title={`Approved: ${applicationStatusCounts["Approved"]}`}
+                >
+                  <span
+                    onClick={() => handleFilterClick("status", "Approved")}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: APPLICATION_STATUS_COLORS["Approved"],
+                    }}
+                  >
+                    {applicationStatusCounts["Approved"]}
+                  </span>
+                </Tooltip>
+                <Tooltip
+                  title={`Rejected: ${applicationStatusCounts["Rejected"]}`}
+                >
+                  <span
+                    onClick={() => handleFilterClick("status", "Rejected")}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: APPLICATION_STATUS_COLORS["Rejected"],
+                    }}
+                  >
+                    {applicationStatusCounts["Rejected"]}
+                  </span>
+                </Tooltip>
+              </div>
 
-          {/* Employment Status Stats */}
-          <div style={styles.statBox}>
-            <Text strong style={styles.indicatorTitle}>
-              {t("Employment_Status")}
-            </Text>
-            <Tooltip title={`Full-Time: ${employmentStatusCounts[2]}`}>
-              <span
-                style={{
-                  ...styles.colorIndicator,
-                  backgroundColor: EMPLOYMENT_STATUS_COLORS[2],
-                }}
-              >
-                {employmentStatusCounts[2]}
-              </span>
-            </Tooltip>
-            <Tooltip title={`Part-Time: ${employmentStatusCounts[1]}`}>
-              <span
-                style={{
-                  ...styles.colorIndicator,
-                  backgroundColor: EMPLOYMENT_STATUS_COLORS[1],
-                }}
-              >
-                {employmentStatusCounts[1]}
-              </span>
-            </Tooltip>
-            <Tooltip title={`Unemployed: ${employmentStatusCounts[0]}`}>
-              <span
-                style={{
-                  ...styles.colorIndicator,
-                  backgroundColor: EMPLOYMENT_STATUS_COLORS[0],
-                }}
-              >
-                {employmentStatusCounts[0]}
-              </span>
-            </Tooltip>
-          </div>
+              {/* Payment History Stats */}
+              <div style={styles.statBox}>
+                <Text strong style={styles.indicatorTitle}>
+                  {t("approved")}
+                </Text>
+                <Tooltip title={`Approved: ${approvedCounts[0]}`}>
+                  <span
+                    onClick={() => handleFilterClick("approved", 1)}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: APPLICATION_APPROVAL_COLORS[0],
+                    }}
+                  >
+                    {approvedCounts[0]}
+                  </span>
+                </Tooltip>
+                <Tooltip title={`Not Approved: ${approvedCounts[1]}`}>
+                  <span
+                    onClick={() => handleFilterClick("approved", 0)}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: APPLICATION_APPROVAL_COLORS[1],
+                    }}
+                  >
+                    {approvedCounts[1]}
+                  </span>
+                </Tooltip>
+              </div>
+            </>
+          ) : (
+            <>
+              {!!isFitlerSelected && (
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    handleFilterClick();
+                  }}
+                >
+                  Clear Filter
+                </Button>
+              )}
+              {/* Credit Score Stats */}
+              <div style={styles.statBox}>
+                <Text strong style={styles.indicatorTitle}>
+                  {t("Credit_Score")}
+                </Text>
+                <Tooltip title={`High (700+): ${creditScoreCounts.high}`}>
+                  <span
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: CREDIT_SCORE_COLORS.high,
+                    }}
+                  >
+                    {creditScoreCounts.high}
+                  </span>
+                </Tooltip>
+                <Tooltip title={`Mid (600-699): ${creditScoreCounts.mid}`}>
+                  <span
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: CREDIT_SCORE_COLORS.mid,
+                    }}
+                  >
+                    {creditScoreCounts.mid}
+                  </span>
+                </Tooltip>
+                <Tooltip title={`Low (<600): ${creditScoreCounts.low}`}>
+                  <span
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: CREDIT_SCORE_COLORS.low,
+                    }}
+                  >
+                    {creditScoreCounts.low}
+                  </span>
+                </Tooltip>
+              </div>
 
-          {/* Payment History Stats */}
-          <div style={styles.statBox}>
-            <Text strong style={styles.indicatorTitle}>
-              {t("Payment_History")}
-            </Text>
-            <Tooltip title={`On Time: ${paymentHistoryCounts[3]}`}>
-              <span
-                style={{
-                  ...styles.colorIndicator,
-                  backgroundColor: PAYMENT_HISTORY_COLORS[3],
-                }}
-              >
-                {paymentHistoryCounts[3]}
-              </span>
-            </Tooltip>
-            <Tooltip title={`Late <30: ${paymentHistoryCounts[2]}`}>
-              <span
-                style={{
-                  ...styles.colorIndicator,
-                  backgroundColor: PAYMENT_HISTORY_COLORS[2],
-                }}
-              >
-                {paymentHistoryCounts[2]}
-              </span>
-            </Tooltip>
-            <Tooltip title={`Late 30-60: ${paymentHistoryCounts[1]}`}>
-              <span
-                style={{
-                  ...styles.colorIndicator,
-                  backgroundColor: PAYMENT_HISTORY_COLORS[1],
-                }}
-              >
-                {paymentHistoryCounts[1]}
-              </span>
-            </Tooltip>
-            <Tooltip title={`Late >60: ${paymentHistoryCounts[0]}`}>
-              <span
-                style={{
-                  ...styles.colorIndicator,
-                  backgroundColor: PAYMENT_HISTORY_COLORS[0],
-                }}
-              >
-                {paymentHistoryCounts[0]}
-              </span>
-            </Tooltip>
-          </div>
+              {/* Employment Status Stats */}
+              <div style={styles.statBox}>
+                <Text strong style={styles.indicatorTitle}>
+                  {t("Employment_Status")}
+                </Text>
+                <Tooltip title={`Full-Time: ${employmentStatusCounts[2]}`}>
+                  <span
+                    onClick={() => handleFilterClick("employment_status", 2)}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: EMPLOYMENT_STATUS_COLORS[2],
+                    }}
+                  >
+                    {employmentStatusCounts[2]}
+                  </span>
+                </Tooltip>
+                <Tooltip title={`Part-Time: ${employmentStatusCounts[1]}`}>
+                  <span
+                    onClick={() => handleFilterClick("employment_status", 1)}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: EMPLOYMENT_STATUS_COLORS[1],
+                    }}
+                  >
+                    {employmentStatusCounts[1]}
+                  </span>
+                </Tooltip>
+                <Tooltip title={`Unemployed: ${employmentStatusCounts[0]}`}>
+                  <span
+                    onClick={() => handleFilterClick("employment_status", 0)}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: EMPLOYMENT_STATUS_COLORS[0],
+                    }}
+                  >
+                    {employmentStatusCounts[0]}
+                  </span>
+                </Tooltip>
+              </div>
+
+              {/* Payment History Stats */}
+              <div style={styles.statBox}>
+                <Text strong style={styles.indicatorTitle}>
+                  {t("Payment_History")}
+                </Text>
+                <Tooltip title={`On Time: ${paymentHistoryCounts[3]}`}>
+                  <span
+                    onClick={() => handleFilterClick("payment_history", 3)}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: PAYMENT_HISTORY_COLORS[3],
+                    }}
+                  >
+                    {paymentHistoryCounts[3]}
+                  </span>
+                </Tooltip>
+                <Tooltip title={`Late <30: ${paymentHistoryCounts[2]}`}>
+                  <span
+                    onClick={() => handleFilterClick("payment_history", 2)}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: PAYMENT_HISTORY_COLORS[2],
+                    }}
+                  >
+                    {paymentHistoryCounts[2]}
+                  </span>
+                </Tooltip>
+                <Tooltip title={`Late 30-60: ${paymentHistoryCounts[1]}`}>
+                  <span
+                    onClick={() => handleFilterClick("payment_history", 1)}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: PAYMENT_HISTORY_COLORS[1],
+                    }}
+                  >
+                    {paymentHistoryCounts[1]}
+                  </span>
+                </Tooltip>
+                <Tooltip title={`Late >60: ${paymentHistoryCounts[0]}`}>
+                  <span
+                    onClick={() => handleFilterClick("payment_history", 0)}
+                    style={{
+                      ...styles.colorIndicator,
+                      backgroundColor: PAYMENT_HISTORY_COLORS[0],
+                    }}
+                  >
+                    {paymentHistoryCounts[0]}
+                  </span>
+                </Tooltip>
+              </div>
+            </>
+          )}
 
           {/* Search Component */}
           <Input.Search
-            placeholder={t("search_users")}
+            placeholder={
+              applicationHeader ? t("search_app") : t("search_users")
+            }
             onSearch={handleSearch}
             style={styles.search}
             enterButton={<SearchOutlined />}

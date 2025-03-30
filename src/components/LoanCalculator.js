@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import ReactECharts from "echarts-for-react";
 import "../styles/loanCalculator.css";
+import { useTranslation } from "react-i18next";
 
 const LoanCalculator = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     amount: "",
     rate: "",
@@ -83,8 +85,7 @@ const LoanCalculator = () => {
 
   return (
     <div className="loan-calculator-container">
-        <h2 className="loan-calculator-title">Loan Calculator</h2>
-      {/* Introductory Paragraph */}
+        {/* <h2 className="loan-calculator-title">Loan Calculator</h2>
       <div className="loan-calculator-intro-card">
         <p className="loan-calculator-intro-text">
           Welcome to our Loan Calculator! Easily determine your monthly
@@ -92,12 +93,20 @@ const LoanCalculator = () => {
           insights to plan your budget, compare loan options, or prepare for
           your next financial step with confidence.
         </p>
+      </div> */}
+
+      <div className="mainHeading-container">
+        <span className="mainHeading">{t("loanCalculator")}</span>
+        <p className="mainParagraph">{t("loanParagraph")}</p>
       </div>
 
       <div style={{ display: "flex", flexDirection: "row", width: '1260px', border:'0px solid', maxHeight:325}}>
         {/* Calculator Card */}
-        <div className="loan-calculator-card">
-          <h2 style={{textAlign:'center', marginTop:-20}}>Enter Loan Details</h2>
+        <div 
+        className="loan-calculator-card"
+        >
+          {/* <h2 style={{textAlign:'center', marginTop:-20}}>Enter Loan Details</h2> */}
+          <h3 className="loan-calculator-chart-title">{t("enterLoanDetails")}</h3>
           <form className="loan-calculator-form" onSubmit={handleSubmit}>
             <input
               type="number"
@@ -131,14 +140,14 @@ const LoanCalculator = () => {
               required
             />
             <button type="submit" className="loan-calculator-button">
-              Calculate
+              {t("calculate")}
             </button>
           </form>
           {result && (
             <div className="loan-calculator-result">
-              <p>Monthly Payment: ${result.monthlyPayment}</p>
-              <p>Total Interest: ${result.totalInterest}</p>
-              <p>Total Payment: ${result.totalPayment}</p>
+              <p>{t("monthlyPayment")}: ${result.monthlyPayment}</p>
+              <p>{t("totalInterest")}: ${result.totalInterest}</p>
+              <p>{t("totalPayment")}: ${result.totalPayment}</p>
             </div>
           )}
           {error && <p className="loan-calculator-error">{error}</p>}
@@ -147,7 +156,7 @@ const LoanCalculator = () => {
         {/* Pie Chart Section */}
         {result && (
           <div className="loan-calculator-chart-card">
-            <h3 className="loan-calculator-chart-title">Loan Breakdown</h3>
+            <h3 className="loan-calculator-chart-title">{t("loanBreakdown")}</h3>
             <ReactECharts
               option={chartOptions}
               style={{ height: "300px", width: "100%" }}
@@ -157,12 +166,12 @@ const LoanCalculator = () => {
       </div>
       {/* Tips Section */}
       <div className="loan-calculator-tips-card">
-        <h3 className="loan-calculator-tips-title">Loan Tips</h3>
+        <h3 className="loan-calculator-tips-title">{t("loanTips")}</h3>
         <ul className="loan-calculator-tips-list">
-          <li>Lower interest rates save you money over time.</li>
-          <li>Shorter loan terms reduce total interest paid.</li>
-          <li>Ensure monthly payments fit your budget.</li>
-          <li>Check your credit score before applying for better rates.</li>
+          <li>{t("tip1")}</li>
+          <li>{t("tip2")}</li>
+          <li>{t("tip3")}</li>
+          <li>{t("tip4")}</li>
         </ul>
       </div>
     </div>
