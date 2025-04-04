@@ -144,8 +144,8 @@ const UserStatsHeader = ({
 
   // Calculate counts for Application Status
   const approvedCounts = {
-    0: data.filter((user) => user.approved === 1)?.length,
-    1: data.filter((user) => user.approved === 0)?.length,
+    0: data.filter((user) => user.status === "Approved")?.length,
+    1: data.filter((user) => user.status != "Approved")?.length,
   };
 
   const handleFilterClick = (key, value) => {
@@ -242,13 +242,13 @@ const UserStatsHeader = ({
               </div>
 
               {/* Payment History Stats */}
-              <div style={styles.statBox}>
+              {/* <div style={styles.statBox}>
                 <Text strong style={styles.indicatorTitle}>
                   {t("approved")}
                 </Text>
                 <Tooltip title={`Approved: ${approvedCounts[0]}`}>
                   <span
-                    onClick={() => handleFilterClick("approved", 1)}
+                    onClick={() => handleFilterClick("status", )}
                     style={{
                       ...styles.colorIndicator,
                       backgroundColor: APPLICATION_APPROVAL_COLORS[0],
@@ -268,7 +268,7 @@ const UserStatsHeader = ({
                     {approvedCounts[1]}
                   </span>
                 </Tooltip>
-              </div>
+              </div> */}
             </>
           ) : (
             <>

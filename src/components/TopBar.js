@@ -34,7 +34,7 @@ const TopBar = () => {
       : []),
     {
       key: "/checkapproval",
-      label: t("check_approval"),
+      label: t("check_approval_menu"),
       icon: <Icon type="FileSearch" />,
     },
   ];

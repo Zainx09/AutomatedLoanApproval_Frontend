@@ -62,19 +62,33 @@ const LoanForm = ({ onFinish, isLoading, result }) => {
         layout="vertical"
         onFinish={onFinish}
         style={{ margin: "0 auto", width: "80%" }}
+        // initialValues={{
+        //   applicant_id: 100001,
+        //   credit_score: 800,
+        //   self_reported_expenses: 1,
+        //   annual_income: 20000,
+        //   self_reported_debt: 1,
+        //   employment_status: 2,
+        //   months_employed: 1,
+        //   credit_utilization: 1,
+        //   num_open_accounts: 1,
+        //   payment_history: 3,
+        //   total_credit_limit: 1000,
+        //   requested_amount:2000
+        // }}
         initialValues={{
-          applicant_id: 100001,
-          credit_score: 800,
-          self_reported_expenses: 1,
-          annual_income: 20000,
-          self_reported_debt: 1,
-          employment_status: 2,
-          months_employed: 1,
-          credit_utilization: 1,
-          num_open_accounts: 1,
-          payment_history: 3,
-          total_credit_limit: 1000,
-          requested_amount:2000
+          applicant_id: 100007,                // From second object (replaces original 100001)
+          credit_score: 690,                   // From second object (replaces original 800)
+          self_reported_expenses: 2500,        // From second object ("2500.00" converted)
+          annual_income: 75000,                // From second object ("75000.00" converted)
+          self_reported_debt: 2000,            // From second object ("2000.00" converted)
+          employment_status: 1,                // From second object (replaces original 2)
+          months_employed: 48,                 // From second object (replaces original 1)
+          credit_utilization: 35,              // From second object ("35.00" converted)
+          num_open_accounts: 6,                // From second object (replaces original 1)
+          payment_history: 3,                  // From second object (same as original)
+          total_credit_limit: 20000,           // From second object ("20000.00" converted)
+          requested_amount: 12000              // From second object ("12000.00" converted)
         }}
       >
         {fieldRows.map((rowFields, rowIndex) => (
@@ -93,7 +107,7 @@ const LoanForm = ({ onFinish, isLoading, result }) => {
                     }
                     rules={[
                       {
-                        required: true,
+                        required: dataPoint.name == "applicant_id" ? false : true,
                         message: `${t(dataPoint.name)} is required`,
                       },
                     ]}

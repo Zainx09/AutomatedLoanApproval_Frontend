@@ -160,7 +160,7 @@ const ResultCardView = ({ result, applicantId }) => {
     );
   }
 
-  // Existing logic for mismatch or approval/denial
+  // logic for approval/denial
   return (
     <Card
       className="checkApproval-form-card"
@@ -195,11 +195,14 @@ const ResultCardView = ({ result, applicantId }) => {
             <div style={{ marginBottom: 10 }} />
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>
               {
-                "Your provied information has been verified. Submit Application to get instant approval."
+                "Your provied information has been verified." +
+                `${!!applicantId ? "Submit Application to get instant approval." : ""}`
+
+
               }
             </Text>
             <br />
-            <Button
+            {!!applicantId && <Button
               type="primary"
               style={{
                 background: "#001529",
@@ -224,6 +227,7 @@ const ResultCardView = ({ result, applicantId }) => {
               {t("submit_application")}
               <Icon type="SendOutlined" style={{ marginLeft: "5px" }} />{" "}
             </Button>
+            }
             {/* <Button
                 type="primary"
                 style={{ background: "#001529", borderColor: "#001529" }}

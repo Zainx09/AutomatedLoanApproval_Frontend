@@ -416,6 +416,7 @@ const AdminPage = () => {
                     onConfirm={async () => {
                       try {
                         await updateApplication({
+                          applicant_id: record.applicant_id,
                           application_id: record.application_id,
                           status: selectedStatus,
                         });
@@ -435,7 +436,7 @@ const AdminPage = () => {
                         setFilteredApplications(updatedFilteredApplications);
                         setSelectedStatus(null);
                       } catch (e) {
-                        message.error(
+                        alert(
                           e.response?.data?.error || t("update_failed")
                         );
                       }
@@ -546,7 +547,7 @@ const AdminPage = () => {
               onClick: () => handleRowClick(record),
             })}
             pagination={{
-              pageSize: 7, // Number of records per page
+              pageSize: 8, // Number of records per page
               showSizeChanger: false, // Optional: hides page size changer
             }}
           />
@@ -595,7 +596,7 @@ const AdminPage = () => {
             //   },
             // })}
             pagination={{
-              pageSize: 7, // Number of records per page
+              pageSize: 15, // Number of records per page
               showSizeChanger: false, // Optional: hides page size changer
             }}
           />

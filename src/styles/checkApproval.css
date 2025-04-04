@@ -5,6 +5,7 @@
     align-items: center;
     gap: 20px;
     min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9ff 0%, #e6ebff 100%);
   }
 
   .admin-container {

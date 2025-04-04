@@ -169,7 +169,7 @@
     "tip4": "Check your credit score before applying for better rates.",
     "calculate":"Calculate",
     "welcomeTo": "Welcome To",
-  "autoApprovalPlatform": "Auto Approval Platform",
+  "autoApprovalPlatform": "Smart Approval Platform",
   "welcomeDescription": "Intelligent auto-approval platform powered by machine learning. Our advanced algorithms analyze applications in real-time, delivering instant decisions with 95%+ accuracy. Designed for efficiency and fast loan approvals",
   "perfectFeatures": "Perfect features to get your",
   "approvalFaster": "Approval Faster",
@@ -183,6 +183,7 @@
   "greaterThanNinetyFivePercent": "> 95%",
   "avgProcessingTime": "Avg. Processing Time",
   "approvalAccuracy": "Approval Accuracy",
-  "exportPdf": "Export PDF"
+  "exportPdf": "Export PDF",
+  "check_approval_menu":"Check Approval"
   }
 
