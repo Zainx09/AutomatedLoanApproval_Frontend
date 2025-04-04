@@ -5,7 +5,7 @@ Welcome to the frontend of our Loan Approval & Prediction System! This platform 
 ---
 
 ## 🔗 Demo Video
-https://drive.google.com/file/d/1vtqIuFuX7heDbz1GkNA2IpoejAp4gE0U/view?usp=drive_link 
+[Click here to Watch Demo Video](https://drive.google.com/file/d/1vtqIuFuX7heDbz1GkNA2IpoejAp4gE0U/view?usp=drive_link){:target="_blank"}
 
 ---
 
