@@ -45,6 +45,7 @@ Welcome to the frontend of our Loan Approval & Prediction System! This platform 
 - 💰 Calculate EMI with live results
 - 📝 Fill application forms easily
 - 👨‍💼 Admin dashboard to view applications
+- 📄 Export application summary as PDF  
 - 🌐 Multilingual support (English 🇬🇧 & French 🇫🇷)  
 - 📦 Clean and modular React architecture
 
