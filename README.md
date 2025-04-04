@@ -22,21 +22,22 @@ Welcome to the frontend of our Loan Approval & Prediction System! This platform 
 ### 🏠 Home Pages
 | Home Page 1 | Home Page 2 | Home Page 3 |
 |-------------|-------------|-------------|
-| ![Home1](https://drive.google.com/file/d/1SNuoHkKkhOqm40zWTrJ1fVz05dzr-cbq/view?usp=drive_link) | ![Home2](https://drive.google.com/file/d/1FmKEAdG_F1wLlslP8SAQm8IytTnhG3IC/view?usp=drive_link) | ![Home3](https://drive.google.com/file/d/1FmKEAdG_F1wLlslP8SAQm8IytTnhG3IC/view?usp=drive_link) |
+| ![Home1](https://drive.google.com/uc?export=view&id=1SNuoHkKkhOqm40zWTrJ1fVz05dzr-cbq) | ![Home2](https://drive.google.com/uc?export=view&id=1FmKEAdG_F1wLlslP8SAQm8IytTnhG3IC) | ![Home3](https://drive.google.com/uc?export=view&id=1FmKEAdG_F1wLlslP8SAQm8IytTnhG3IC) |
 
 ### 🧮 Loan Calculator
-![Loan Calculator](https://drive.google.com/file/d/1UcxRakoZP7FGvBAQDxCHs5hROfstd7Ow/view?usp=drive_link)
+![Loan Calculator](https://drive.google.com/uc?export=view&id=1UcxRakoZP7FGvBAQDxCHs5hROfstd7Ow)
 
 ### ✅ Check Approval Page
-![Approval Check](https://drive.google.com/file/d/1QmzxUBp30zFkaTfQVvImc2pnrHBmGUXM/view?usp=drive_link)
+![Approval Check](https://drive.google.com/uc?export=view&id=1QmzxUBp30zFkaTfQVvImc2pnrHBmGUXM)
 
 ### 📝 Application Form
-![Application](https://drive.google.com/file/d/17rl2eaSCWBGiHBZtHy_R2wtZxLdr6-ug/view?usp=drive_link)
+![Application](https://drive.google.com/uc?export=view&id=17rl2eaSCWBGiHBZtHy_R2wtZxLdr6-ug)
 
 ### 🛠️ Admin Page
-![Admin Page](https://drive.google.com/file/d/1Vzw1n56PD7Vi0wj8q7nURqXW8TCAPgsp/view?usp=drive_link)
+![Admin Page](https://drive.google.com/uc?export=view&id=1Vzw1n56PD7Vi0wj8q7nURqXW8TCAPgsp)
 
 ---
+
 
 ## ✨ Features
 
@@ -52,5 +53,13 @@ Welcome to the frontend of our Loan Approval & Prediction System! This platform 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/Zainx09/AutomatedLoanApproval_Frontend.git
+   cd AutomatedLoanApproval_Frontend
+
+2. **Install Dependencies**
+   ```bash
+   npm i
+
+3. **Run the project**
+   ```bash
+   npm start
