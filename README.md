@@ -1,4 +1,4 @@
-# 🚀 Loan Approval & Prediction System – Frontend (React)
+# 🚀 Auto LOC Approval System – Frontend (React)
 
 Welcome to the frontend of our Loan Approval & Prediction System! This platform allows users to check loan eligibility, calculate EMIs, and apply for loans. Admins can manage applications with ease.
 
